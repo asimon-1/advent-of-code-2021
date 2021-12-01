@@ -1,4 +1,4 @@
-use std::{error::Error, fs, os::windows};
+use std::{error::Error, fs};
 
 fn read_file(filename: &str) -> String {
     println!("In file {}", filename);
