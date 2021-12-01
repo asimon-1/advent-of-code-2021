@@ -1,4 +1,4 @@
-use std::{error::Error, fs};
+use std::{error::Error, fs, os::windows};
 
 fn read_file(filename: &str) -> String {
     println!("In file {}", filename);
@@ -14,15 +14,17 @@ fn main() -> Result<(), Box<dyn Error>> {
 }
 
 fn part_1(input: &str) -> Result<u32, Box<dyn Error>> {
+    let lines: Vec<u32> = input
+        .lines()
+        .map(|line| line.parse::<u32>().expect("Could not parse the value"))
+        .collect();
+    let slices = lines.windows(2);
     let mut count: u32 = 0;
-    let mut last_val: u32 = 999999999;
-    for line in input.lines() {
-        let current_val: u32 = line.parse()?;
-        if current_val > last_val {
+    slices.for_each(|slice| {
+        if slice[1] > slice[0] {
             count += 1
         }
-        last_val = current_val
-    }
+    });
     Ok(count)
 }
 
@@ -41,15 +43,13 @@ fn part_2(input: &str) -> Result<u32, Box<dyn Error>> {
         .collect();
     let slices = lines.windows(3);
 
+    let sums: Vec<u32> = slices.map(|slice| slice.iter().sum()).collect();
     let mut count: u32 = 0;
-    let mut last_sum: u32 = 999999999;
-    for slice in slices {
-        let current_sum: u32 = slice.iter().sum();
-        if current_sum > last_sum {
+    sums.windows(2).for_each(|x| {
+        if x[1] > x[0] {
             count += 1
         }
-        last_sum = current_sum;
-    }
+    });
     Ok(count)
 }
 
